@@ -103,10 +103,12 @@ export default class Ball extends CircleSprite {
 
     public detectCollisionWithTileAndGetTileAndDirection(tiles: Tile[]): {
         tile: Tile;
+        tileIndex: number;
         direction: Direction;
     } | null {
         const ballDirection = this.getBallDirection();
-        for (const tile of tiles) {
+        for (let i = 0; i < tiles.length; i++) {
+            const tile = tiles[i];
             const isBallHorizontallyWithinTile = this.isBallHorizontallyWithinRect(tile.position, tile.dimensions);
             if (!isBallHorizontallyWithinTile) {
                 continue;
@@ -118,6 +120,7 @@ export default class Ball extends CircleSprite {
                 if (isCollision) {
                     return {
                         tile,
+                        tileIndex: i,
                         direction: "up",
                     };
                 }
@@ -128,6 +131,7 @@ export default class Ball extends CircleSprite {
                 if (isCollision) {
                     return {
                         tile,
+                        tileIndex: i,
                         direction: "down",
                     };
                 }

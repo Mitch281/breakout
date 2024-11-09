@@ -9,6 +9,7 @@ export default abstract class RectSprite {
         y: 0,
     };
     colour: string;
+    graphics: PIXI.Graphics | null = null;
 
     constructor(position: Position, colour: string) {
         this.position = position;
@@ -16,11 +17,19 @@ export default abstract class RectSprite {
     }
 
     public draw(stage: PIXI.Container<PIXI.ContainerChild>): void {
+        this.graphics?.clear();
         const graphics = new PIXI.Graphics();
-        graphics.fill(this.colour); // Convert color to hex format
+        graphics.fill(this.colour);
         graphics.rect(this.position.x, this.position.y, this.dimensions.x, this.dimensions.y);
         graphics.fill();
-        stage.addChild(graphics);
+        this.graphics = stage.addChild(graphics);
+    }
+
+    public remove(stage: PIXI.Container<PIXI.ContainerChild>): void {
+        if (!this.graphics) {
+            return;
+        }
+        stage.removeChild(this.graphics);
     }
 
     protected move(): void {

@@ -50,6 +50,11 @@ function createTiles(): Tile[] {
     return tiles;
 }
 
+function removeTileAtIndex(tiles: Tile[], tileIndex: number): Tile[] {
+    // return tiles.filter((_, index) => index !== tileIndex);
+    tiles.splice(tileIndex, 1);
+}
+
 async function main(): Promise<void> {
     const app = new PIXI.Application();
     await app.init({ width: SCREEN_WIDTH, height: SCREEN_HEIGHT });
@@ -92,7 +97,7 @@ async function main(): Promise<void> {
 
         const tileBallCollidedWithAndCollisionDirection = ball.detectCollisionWithTileAndGetTileAndDirection(tiles);
         if (tileBallCollidedWithAndCollisionDirection) {
-            const collisionDirection = tileBallCollidedWithAndCollisionDirection.direction;
+            const { tile, tileIndex, direction: collisionDirection } = tileBallCollidedWithAndCollisionDirection;
             switch (collisionDirection) {
                 case "up":
                 case "down":
@@ -100,9 +105,12 @@ async function main(): Promise<void> {
                     break;
                 case "left":
                 case "right":
-                    ball.velocity.y *= -1;
+                    ball.velocity.x *= -1;
                     break;
             }
+
+            tile.remove(app.stage);
+            removeTileAtIndex(tiles, tileIndex);
         }
     });
 }
