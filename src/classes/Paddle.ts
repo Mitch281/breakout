@@ -1,14 +1,16 @@
+import { SCREEN_WIDTH } from "../screen-dimensions";
 import { Dimension, Position } from "../types";
 import Sprite from "./Sprite";
 
 export default class Paddle extends Sprite {
-    position: Position = {
-        x: 10,
+    dimensions: Dimension = {
+        x: 150,
         y: 10,
     };
-    dimensions: Dimension = {
-        x: 10,
-        y: 10,
+
+    position: Position = {
+        x: SCREEN_WIDTH / 2 - this.dimensions.x / 2,
+        y: 450,
     };
     colour: string = "white";
 
