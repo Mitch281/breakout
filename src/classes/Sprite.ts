@@ -18,7 +18,7 @@ export default abstract class Sprite {
         stage.addChild(graphics);
     }
 
-    public move(): void {
+    protected move(): void {
         this.position.x += this.velocity.x;
         this.position.y += this.velocity.y;
     }

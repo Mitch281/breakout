@@ -14,23 +14,38 @@ export default class Paddle extends Sprite {
 
     HORIZONTAL_SPEED = 1;
 
+    currentKeyBeingPressed: "ArrowLeft" | "ArrowRight" | null = null;
+
     constructor() {
         super();
-        this.detectMovement();
+        this.initEventListeners();
     }
 
-    detectMovement(): void {
+    initEventListeners(): void {
         document.addEventListener("keydown", (e: KeyboardEvent) => {
-            console.log(e);
-            switch (e.key) {
-                case "ArrowRight":
-                    console.log("yay");
-                    this.velocity.x = this.HORIZONTAL_SPEED;
-                    break;
-                case "ArrowLeft":
-                    this.velocity.x = -this.HORIZONTAL_SPEED;
-                    break;
+            if (e.key === "ArrowRight" || e.key === "ArrowLeft") {
+                this.currentKeyBeingPressed = e.key;
             }
         });
+
+        document.addEventListener("keyup", (e: KeyboardEvent) => {
+            if (e.key === "ArrowRight" && this.currentKeyBeingPressed === "ArrowRight") {
+                this.currentKeyBeingPressed = null;
+            } else if (e.key === "ArrowLeft" && this.currentKeyBeingPressed === "ArrowLeft") {
+                this.currentKeyBeingPressed = null;
+            }
+        });
+    }
+
+    public detectMovement(): void {
+        if (this.currentKeyBeingPressed === "ArrowLeft") {
+            this.velocity.x = -this.HORIZONTAL_SPEED;
+        } else if (this.currentKeyBeingPressed === "ArrowRight") {
+            this.velocity.x = this.HORIZONTAL_SPEED;
+        } else {
+            this.velocity.x = 0;
+        }
+
+        this.move();
     }
 }

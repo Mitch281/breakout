@@ -23,7 +23,7 @@ async function main(): Promise<void> {
         clearStage(app.stage);
         console.log(paddle.velocity);
         paddle.draw(app.stage);
-        paddle.move();
+        paddle.detectMovement();
     });
 }
 
