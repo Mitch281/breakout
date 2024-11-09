@@ -50,8 +50,7 @@ function createTiles(): Tile[] {
     return tiles;
 }
 
-function removeTileAtIndex(tiles: Tile[], tileIndex: number): Tile[] {
-    // return tiles.filter((_, index) => index !== tileIndex);
+function removeTileAtIndex(tiles: Tile[], tileIndex: number): void {
     tiles.splice(tileIndex, 1);
 }
 

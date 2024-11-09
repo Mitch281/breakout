@@ -48,6 +48,16 @@ export default class Ball extends CircleSprite {
         return rightOfBall > leftOfRect && leftOfBall < rightOfRect;
     }
 
+    private isBallVerticallyWithinRect(rectPosition: Position, rectDimensions: Dimension) {
+        const topOfBall = this.getTopPosition();
+        const bottomOfBall = this.getBottomPosition();
+
+        const topOfRect = rectPosition.y;
+        const bottomOfRect = rectPosition.y + rectDimensions.y;
+
+        return topOfBall > topOfRect && bottomOfBall < bottomOfRect;
+    }
+
     public detectCollisionWithPaddle(paddle: Paddle): boolean {
         const topOfPaddle = paddle.position.y;
         const bottomOfBall = this.getBottomPosition();
@@ -110,11 +120,10 @@ export default class Ball extends CircleSprite {
         for (let i = 0; i < tiles.length; i++) {
             const tile = tiles[i];
             const isBallHorizontallyWithinTile = this.isBallHorizontallyWithinRect(tile.position, tile.dimensions);
-            if (!isBallHorizontallyWithinTile) {
-                continue;
-            }
+            const isBallVerticallyWithinTile = this.isBallVerticallyWithinRect(tile.position, tile.dimensions);
             if (ballDirection.includes("up")) {
                 const isCollision =
+                    isBallHorizontallyWithinTile &&
                     this.getBottomPosition() >= tile.getBottomPosition() &&
                     this.getTopPosition() <= tile.getBottomPosition();
                 if (isCollision) {
@@ -127,7 +136,9 @@ export default class Ball extends CircleSprite {
             }
             if (ballDirection.includes("down")) {
                 const isCollision =
-                    this.getBottomPosition() >= tile.getTopPosition() && this.getTopPosition() <= tile.getTopPosition();
+                    isBallHorizontallyWithinTile &&
+                    this.getBottomPosition() >= tile.getTopPosition() &&
+                    this.getTopPosition() <= tile.getTopPosition();
                 if (isCollision) {
                     return {
                         tile,
@@ -136,24 +147,32 @@ export default class Ball extends CircleSprite {
                     };
                 }
             }
-            // if (ballDirection.includes("left")) {
-            //     const isCollision = this.getLeftPosition() <= tile.position.x;
-            //     if (isCollision) {
-            //         return {
-            //             tile,
-            //             direction: "down",
-            //         };
-            //     }
-            // }
-            // if (ballDirection.includes("right")) {
-            //     const isCollision = this.getRightPosition() >= tile.position.y;
-            //     if (isCollision) {
-            //         return {
-            //             tile,
-            //             direction: "right",
-            //         };
-            //     }
-            // }
+            if (ballDirection.includes("left")) {
+                const isCollision =
+                    isBallVerticallyWithinTile &&
+                    this.getRightPosition() >= tile.getRightPosition() &&
+                    this.getLeftPosition() <= tile.getRightPosition();
+                if (isCollision) {
+                    return {
+                        tile,
+                        tileIndex: i,
+                        direction: "down",
+                    };
+                }
+            }
+            if (ballDirection.includes("right")) {
+                const isCollision =
+                    isBallVerticallyWithinTile &&
+                    this.getLeftPosition() <= tile.getLeftPosition() &&
+                    this.getRightPosition() >= tile.getLeftPosition();
+                if (isCollision) {
+                    return {
+                        tile,
+                        tileIndex: i,
+                        direction: "right",
+                    };
+                }
+            }
         }
 
         return null;
