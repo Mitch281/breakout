@@ -77,6 +77,18 @@ async function main(): Promise<void> {
         if (ball.detectCollisionWithPaddle(paddle)) {
             ball.velocity.y *= -1;
         }
+
+        const wallThatBallCollidedWith = ball.detectCollisionWithWallAndGetWall();
+        switch (wallThatBallCollidedWith) {
+            case "bottom":
+            case "top":
+                ball.velocity.y *= -1;
+                break;
+            case "left":
+            case "right":
+                ball.velocity.x *= -1;
+                break;
+        }
     });
 }
 

@@ -31,6 +31,10 @@ export default class Ball extends CircleSprite {
         return this.position.y + this.radius;
     }
 
+    private getTopPosition(): number {
+        return this.position.y - this.radius;
+    }
+
     public detectCollisionWithPaddle(paddle: Paddle): boolean {
         const topOfPaddle = paddle.position.y;
         const leftOfPaddle = paddle.position.x;
@@ -40,5 +44,22 @@ export default class Ball extends CircleSprite {
         const rightOfBall = this.getRightPosition();
 
         return bottomOfBall >= topOfPaddle && rightOfBall > leftOfPaddle && leftOfBall < rightOfPaddle;
+    }
+
+    public detectCollisionWithWallAndGetWall(): "bottom" | "top" | "left" | "right" | null {
+        if (this.getLeftPosition() <= 0) {
+            return "left";
+        }
+        if (this.getRightPosition() >= SCREEN_WIDTH) {
+            return "right";
+        }
+        if (this.getTopPosition() <= 0) {
+            return "top";
+        }
+        if (this.getBottomPosition() >= SCREEN_HEIGHT) {
+            return "bottom";
+        }
+
+        return null;
     }
 }
