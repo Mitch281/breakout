@@ -72,6 +72,11 @@ async function main(): Promise<void> {
         }
 
         ball.draw(app.stage);
+        ball.move();
+
+        if (ball.detectCollisionWithPaddle(paddle)) {
+            ball.velocity.y *= -1;
+        }
     });
 }
 

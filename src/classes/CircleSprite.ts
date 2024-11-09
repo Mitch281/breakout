@@ -2,11 +2,7 @@ import * as PIXI from "pixi.js";
 import { Position, Velocity } from "../types";
 
 export default abstract class CircleSprite {
-    velocity: Velocity = {
-        x: 0,
-        y: 0,
-    };
-
+    abstract velocity: Velocity;
     abstract colour: string;
     abstract position: Position;
     abstract radius: number;
@@ -19,7 +15,7 @@ export default abstract class CircleSprite {
         stage.addChild(graphics);
     }
 
-    protected move(): void {
+    public move(): void {
         this.position.x += this.velocity.x;
         this.position.y += this.velocity.y;
     }
