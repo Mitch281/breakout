@@ -84,13 +84,16 @@ async function main(): Promise<void> {
 
         const wallThatBallCollidedWith = ball.detectCollisionWithWallAndGetWall();
         switch (wallThatBallCollidedWith) {
-            case "bottom":
             case "top":
                 ball.velocity.y *= -1;
                 break;
             case "left":
             case "right":
                 ball.velocity.x *= -1;
+                break;
+            case "bottom":
+                // Game over.
+                app.ticker.stop();
                 break;
         }
 
