@@ -18,8 +18,8 @@ export default abstract class Sprite {
         stage.addChild(graphics);
     }
 
-    protected move(velocity: Velocity): void {
-        this.velocity.x += velocity.x;
-        this.velocity.y += velocity.y;
+    public move(): void {
+        this.position.x += this.velocity.x;
+        this.position.y += this.velocity.y;
     }
 }
