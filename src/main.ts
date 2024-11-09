@@ -1,4 +1,5 @@
 import * as PIXI from "pixi.js";
+import Ball from "./classes/Ball";
 import Paddle from "./classes/Paddle";
 import Tile from "./classes/Tile";
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from "./screen-dimensions";
@@ -58,6 +59,7 @@ async function main(): Promise<void> {
 
     const paddle = new Paddle();
     const tiles = createTiles();
+    const ball = new Ball();
 
     app.ticker.add(() => {
         clearStage(app.stage);
@@ -68,6 +70,8 @@ async function main(): Promise<void> {
         for (const tile of tiles) {
             tile.draw(app.stage);
         }
+
+        ball.draw(app.stage);
     });
 }
 
