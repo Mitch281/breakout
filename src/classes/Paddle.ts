@@ -1,13 +1,13 @@
 import { SCREEN_WIDTH } from "../screen-dimensions";
 import { Dimension } from "../types";
-import Sprite from "./Sprite";
+import RectSprite from "./RectSprite";
 
 const PADDLE_DIMENSIONS: Dimension = {
     x: 150,
     y: 10,
 };
 
-export default class Paddle extends Sprite {
+export default class Paddle extends RectSprite {
     dimensions: Dimension = PADDLE_DIMENSIONS;
 
     HORIZONTAL_SPEED = 1;

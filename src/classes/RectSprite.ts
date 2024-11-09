@@ -1,7 +1,7 @@
 import * as PIXI from "pixi.js";
 import { Dimension, Position, Velocity } from "../types";
 
-export default abstract class Sprite {
+export default abstract class RectSprite {
     position: Position;
     abstract dimensions: Dimension;
     velocity: Velocity = {
