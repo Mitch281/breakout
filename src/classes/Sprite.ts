@@ -2,13 +2,18 @@ import * as PIXI from "pixi.js";
 import { Dimension, Position, Velocity } from "../types";
 
 export default abstract class Sprite {
-    abstract position: Position;
+    position: Position;
     abstract dimensions: Dimension;
     velocity: Velocity = {
         x: 0,
         y: 0,
     };
-    abstract colour: string;
+    colour: string;
+
+    constructor(position: Position, colour: string) {
+        this.position = position;
+        this.colour = colour;
+    }
 
     public draw(stage: PIXI.Container<PIXI.ContainerChild>): void {
         const graphics = new PIXI.Graphics();

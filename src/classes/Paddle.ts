@@ -1,25 +1,21 @@
 import { SCREEN_WIDTH } from "../screen-dimensions";
-import { Dimension, Position } from "../types";
+import { Dimension } from "../types";
 import Sprite from "./Sprite";
 
-export default class Paddle extends Sprite {
-    dimensions: Dimension = {
-        x: 150,
-        y: 10,
-    };
+const PADDLE_DIMENSIONS: Dimension = {
+    x: 150,
+    y: 10,
+};
 
-    position: Position = {
-        x: SCREEN_WIDTH / 2 - this.dimensions.x / 2,
-        y: 450,
-    };
-    colour: string = "white";
+export default class Paddle extends Sprite {
+    dimensions: Dimension = PADDLE_DIMENSIONS;
 
     HORIZONTAL_SPEED = 1;
 
     currentKeyBeingPressed: "ArrowLeft" | "ArrowRight" | null = null;
 
     constructor() {
-        super();
+        super({ x: SCREEN_WIDTH / 2 - PADDLE_DIMENSIONS.x / 2, y: 450 }, "white");
         this.initEventListeners();
     }
 
