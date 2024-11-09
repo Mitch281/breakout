@@ -13,4 +13,20 @@ export default class Tile extends RectSprite {
     constructor(position: Position, colour: string) {
         super(position, colour);
     }
+
+    public getLeftPosition(): number {
+        return this.position.x;
+    }
+
+    public getRightPosition(): number {
+        return this.position.x + this.dimensions.x;
+    }
+
+    public getTopPosition(): number {
+        return this.position.y;
+    }
+
+    public getBottomPosition(): number {
+        return this.position.y + this.dimensions.y;
+    }
 }

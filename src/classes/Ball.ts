@@ -1,7 +1,8 @@
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from "../screen-dimensions";
-import { Dimension, Position, Velocity } from "../types";
+import { Dimension, Direction, Position, Velocity } from "../types";
 import CircleSprite from "./CircleSprite";
 import Paddle from "./Paddle";
+import Tile from "./Tile";
 
 const BALL_RADIUS = 5;
 const STARTING_POSITION: Position = {
@@ -12,6 +13,8 @@ const STARTING_VELOCITY: Velocity = {
     x: -1,
     y: 3,
 };
+
+type BallDirection = "up" | "down" | "left" | "right" | "up-right" | "up-left" | "down-right" | "down-left";
 
 export default class Ball extends CircleSprite {
     radius: number = BALL_RADIUS;
@@ -52,7 +55,7 @@ export default class Ball extends CircleSprite {
         return bottomOfBall >= topOfPaddle && this.isBallHorizontallyWithinRect(paddle.position, paddle.dimensions);
     }
 
-    public detectCollisionWithWallAndGetWall(): "bottom" | "top" | "left" | "right" | null {
+    public detectCollisionWithWallAndGetWall(): "left" | "right" | "top" | "bottom" | null {
         if (this.getLeftPosition() <= 0) {
             return "left";
         }
@@ -64,6 +67,89 @@ export default class Ball extends CircleSprite {
         }
         if (this.getBottomPosition() >= SCREEN_HEIGHT) {
             return "bottom";
+        }
+
+        return null;
+    }
+
+    public getBallDirection(): BallDirection {
+        if (this.velocity.x === 0 && this.velocity.y > 0) {
+            return "down";
+        }
+        if (this.velocity.x === 0 && this.velocity.y < 0) {
+            return "up";
+        }
+        if (this.velocity.y === 0 && this.velocity.x > 0) {
+            return "right";
+        }
+        if (this.velocity.y === 0 && this.velocity.x < 0) {
+            return "left";
+        }
+        if (this.velocity.x < 0 && this.velocity.y < 0) {
+            return "up-left";
+        }
+        if (this.velocity.x > 0 && this.velocity.y < 0) {
+            return "up-right";
+        }
+        if (this.velocity.x < 0 && this.velocity.y > 0) {
+            return "down-left";
+        }
+        if (this.velocity.x > 0 && this.velocity.y > 0) {
+            return "down-right";
+        }
+
+        throw new Error("Something went wrong during obtaining ball direction.");
+    }
+
+    public detectCollisionWithTileAndGetTileAndDirection(tiles: Tile[]): {
+        tile: Tile;
+        direction: Direction;
+    } | null {
+        const ballDirection = this.getBallDirection();
+        for (const tile of tiles) {
+            const isBallHorizontallyWithinTile = this.isBallHorizontallyWithinRect(tile.position, tile.dimensions);
+            if (!isBallHorizontallyWithinTile) {
+                continue;
+            }
+            if (ballDirection.includes("up")) {
+                const isCollision =
+                    this.getBottomPosition() >= tile.getBottomPosition() &&
+                    this.getTopPosition() <= tile.getBottomPosition();
+                if (isCollision) {
+                    return {
+                        tile,
+                        direction: "up",
+                    };
+                }
+            }
+            if (ballDirection.includes("down")) {
+                const isCollision =
+                    this.getBottomPosition() >= tile.getTopPosition() && this.getTopPosition() <= tile.getTopPosition();
+                if (isCollision) {
+                    return {
+                        tile,
+                        direction: "down",
+                    };
+                }
+            }
+            // if (ballDirection.includes("left")) {
+            //     const isCollision = this.getLeftPosition() <= tile.position.x;
+            //     if (isCollision) {
+            //         return {
+            //             tile,
+            //             direction: "down",
+            //         };
+            //     }
+            // }
+            // if (ballDirection.includes("right")) {
+            //     const isCollision = this.getRightPosition() >= tile.position.y;
+            //     if (isCollision) {
+            //         return {
+            //             tile,
+            //             direction: "right",
+            //         };
+            //     }
+            // }
         }
 
         return null;

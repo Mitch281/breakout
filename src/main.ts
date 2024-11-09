@@ -89,6 +89,21 @@ async function main(): Promise<void> {
                 ball.velocity.x *= -1;
                 break;
         }
+
+        const tileBallCollidedWithAndCollisionDirection = ball.detectCollisionWithTileAndGetTileAndDirection(tiles);
+        if (tileBallCollidedWithAndCollisionDirection) {
+            const collisionDirection = tileBallCollidedWithAndCollisionDirection.direction;
+            switch (collisionDirection) {
+                case "up":
+                case "down":
+                    ball.velocity.y *= -1;
+                    break;
+                case "left":
+                case "right":
+                    ball.velocity.y *= -1;
+                    break;
+            }
+        }
     });
 }
 
