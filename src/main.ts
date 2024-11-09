@@ -78,8 +78,23 @@ async function main(): Promise<void> {
         ball.draw(app.stage);
         ball.move();
 
-        if (ball.detectCollisionWithPaddle(paddle)) {
-            ball.velocity.y *= -1;
+        const ballCollisionWithPaddleLocation = ball.detectCollisionWithPaddleAndGetLocation(paddle);
+        switch (ballCollisionWithPaddleLocation) {
+            case "middle":
+                ball.velocity.y *= -1;
+                break;
+            case "left":
+                ball.velocity.y *= -1;
+                if (ball.velocity.x > 0) {
+                    ball.velocity.x *= -1;
+                }
+                break;
+            case "right":
+                ball.velocity.y *= -1;
+                if (ball.velocity.x < 0) {
+                    ball.velocity.x *= -1;
+                }
+                break;
         }
 
         const wallThatBallCollidedWith = ball.detectCollisionWithWallAndGetWall();

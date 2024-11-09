@@ -10,7 +10,7 @@ const PADDLE_DIMENSIONS: Dimension = {
 export default class Paddle extends RectSprite {
     dimensions: Dimension = PADDLE_DIMENSIONS;
 
-    HORIZONTAL_SPEED = 1;
+    HORIZONTAL_SPEED = 3;
 
     currentKeyBeingPressed: "ArrowLeft" | "ArrowRight" | null = null;
 
@@ -63,5 +63,13 @@ export default class Paddle extends RectSprite {
             (hasHitLeft && this.currentKeyBeingPressed === "ArrowLeft") ||
             (hasHitRight && this.currentKeyBeingPressed === "ArrowRight")
         );
+    }
+
+    public getLeftPosition(): number {
+        return this.position.x;
+    }
+
+    public getRightPosition(): number {
+        return this.position.x + this.dimensions.x;
     }
 }

@@ -58,11 +58,29 @@ export default class Ball extends CircleSprite {
         return topOfBall > topOfRect && bottomOfBall < bottomOfRect;
     }
 
-    public detectCollisionWithPaddle(paddle: Paddle): boolean {
+    public detectCollisionWithPaddleAndGetLocation(paddle: Paddle): "left" | "middle" | "right" | null {
         const topOfPaddle = paddle.position.y;
         const bottomOfBall = this.getBottomPosition();
 
-        return bottomOfBall >= topOfPaddle && this.isBallHorizontallyWithinRect(paddle.position, paddle.dimensions);
+        const isCollision =
+            bottomOfBall >= topOfPaddle && this.isBallHorizontallyWithinRect(paddle.position, paddle.dimensions);
+        if (!isCollision) {
+            return null;
+        }
+
+        const leftOfPaddle = paddle.getLeftPosition();
+        const rightOfPaddle = paddle.getRightPosition();
+        const middleOfPaddle = leftOfPaddle + (rightOfPaddle - leftOfPaddle) / 2;
+        const middleBuffer = 20;
+
+        if (this.position.x <= middleOfPaddle - middleBuffer) {
+            return "left";
+        }
+        if (this.position.x >= middleOfPaddle + middleBuffer) {
+            return "right";
+        }
+
+        return "middle";
     }
 
     public detectCollisionWithWallAndGetWall(): "left" | "right" | "top" | "bottom" | null {
