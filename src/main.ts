@@ -21,7 +21,6 @@ async function main(): Promise<void> {
 
     app.ticker.add(() => {
         clearStage(app.stage);
-        console.log(paddle.velocity);
         paddle.draw(app.stage);
         paddle.detectMovement();
     });

@@ -41,13 +41,31 @@ export default class Paddle extends Sprite {
 
     public detectMovement(): void {
         if (this.currentKeyBeingPressed === "ArrowLeft") {
+            if (this.detectPaddleHitEdgeOfScreen()) {
+                this.velocity.x = 0;
+                return;
+            }
             this.velocity.x = -this.HORIZONTAL_SPEED;
         } else if (this.currentKeyBeingPressed === "ArrowRight") {
+            if (this.detectPaddleHitEdgeOfScreen()) {
+                this.velocity.x = 0;
+                return;
+            }
             this.velocity.x = this.HORIZONTAL_SPEED;
         } else {
             this.velocity.x = 0;
         }
 
         this.move();
+    }
+
+    private detectPaddleHitEdgeOfScreen(): boolean {
+        const hasHitLeft = this.position.x === 0;
+        const hasHitRight = this.position.x + this.dimensions.x === SCREEN_WIDTH;
+
+        return (
+            (hasHitLeft && this.currentKeyBeingPressed === "ArrowLeft") ||
+            (hasHitRight && this.currentKeyBeingPressed === "ArrowRight")
+        );
     }
 }
