@@ -114,6 +114,7 @@ async function main(): Promise<void> {
 
         const tileBallCollidedWithAndCollisionDirection = ball.detectCollisionWithTileAndGetTileAndDirection(tiles);
         if (tileBallCollidedWithAndCollisionDirection) {
+            ball.increaseSpeed();
             const { tile, tileIndex, direction: collisionDirection } = tileBallCollidedWithAndCollisionDirection;
             switch (collisionDirection) {
                 case "up":

@@ -14,6 +14,9 @@ const STARTING_VELOCITY: Velocity = {
     y: 3,
 };
 
+// The amount to increase the speed everytime
+const SPEED_INCREASE_AMOUNT = 0.1;
+
 type BallDirection = "up" | "down" | "left" | "right" | "up-right" | "up-left" | "down-right" | "down-left";
 
 export default class Ball extends CircleSprite {
@@ -194,5 +197,35 @@ export default class Ball extends CircleSprite {
         }
 
         return null;
+    }
+
+    private calculateSpeed(): number {
+        return Math.sqrt(Math.pow(this.velocity.x, 2) + Math.pow(this.velocity.y, 2));
+    }
+
+    public increaseSpeed(): void {
+        const currentSpeed = this.calculateSpeed();
+        const newSpeed = currentSpeed + SPEED_INCREASE_AMOUNT;
+
+        let newXVelocity = this.velocity.x * (newSpeed / currentSpeed);
+
+        if (this.velocity.x < 0) {
+            newXVelocity = Math.abs(newXVelocity) * -1;
+        } else {
+            newXVelocity = Math.abs(newXVelocity);
+        }
+
+        let newYVelocity = this.velocity.y * (newSpeed / currentSpeed);
+
+        if (this.velocity.y < 0) {
+            newYVelocity = Math.abs(newYVelocity) * -1;
+        } else {
+            newYVelocity = Math.abs(newYVelocity);
+        }
+
+        this.velocity = {
+            x: newXVelocity,
+            y: newYVelocity,
+        };
     }
 }
